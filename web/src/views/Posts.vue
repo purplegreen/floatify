@@ -1,10 +1,16 @@
 <template>
   <main>
-    <div class="topone">
-      <span id="prova" class="magnified-element">
-        | | \
-      </span>
+    <div class="a">
+      <span class="magnified-element">|</span>
+    </div>
+    <div class="b">
+      <span class="magnified-element">|</span>
+    </div>
+    <div class="c">
+      <span class="magnified-element">\</span>
+    </div>
 
+    <div class="topone position">
       <div class="top-anim">
         <div class="box-one">
           <p id="d0">d</p>
@@ -26,20 +32,19 @@
       </div>
     </div>
     <ul class="list">
-      <PostCard
-        v-for="post in posts"
-        class="list__item"
-        :key="post._id"
-        v-bind:post="post"
-      />
+      <PostCard v-for="post in posts" class="list__item" :key="post._id" v-bind:post="post" />
     </ul>
   </main>
 </template>
 
 <script>
-import gsap from "gsap";
 import PostCard from "@/components/PostCard.vue";
 import sanity from "../sanity";
+import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
+
 // import BlockContent from "sanity-blocks-vue-component";
 const query = `*[_type == "post" ] | order(releaseDate desc)
 {
@@ -62,46 +67,52 @@ const query = `*[_type == "post" ] | order(releaseDate desc)
 export default {
   name: "Posts",
   components: {
-    PostCard,
+    PostCard
     // BlockContent,
   },
   data() {
     return {
       loading: true,
-      posts: [],
+      posts: []
     };
   },
   created() {
     this.fetchData();
   },
   watch: {
-    $route: "fetchData",
+    $route: "fetchData"
   },
   mounted: function() {
-    this.startAnimations();
+    this.startAnimation();
   },
   methods: {
     fetchData() {
       this.error = this.post = null;
       this.loading = true;
       sanity.fetch(query).then(
-        (posts) => {
+        posts => {
           this.loading = false;
           this.posts = posts;
           // this.texts = this.post.title;
         },
-        (error) => {
+        error => {
           this.error = error;
         }
       );
     },
-    startAnimations: function() {
-      gsap.to("#prova", {
-        scrollTrigger: "#prova", // start the animation when ".box" enters the viewport (once)
-        x: 500,
+    startAnimation: function() {
+      gsap.to(".c", {
+        scrollTrigger: {
+          trigger: ".c",
+          markers: true,
+          toggleActions: "restart pause reverse reset"
+        },
+        x: 400,
+        rotation: 360,
+        duration: 3
       });
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -130,6 +141,16 @@ main {
   display: flex;
 }
 
+.a,
+.b,
+.c {
+  background-color: lightgreen;
+  width: 60px;
+  height: 60px;
+  margin: 13px;
+  padding: 7px;
+}
+
 /* first svg animation */
 
 .topone {
@@ -138,8 +159,8 @@ main {
 }
 
 .magnified-element {
-  font-size: 30vw;
-  color: rgba(152, 170, 161, 0.3);
+  font-size: 2.3rem;
+  color: black;
 }
 
 .top-anim {

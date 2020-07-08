@@ -14,7 +14,7 @@ const requireComponent = require.context(
   /Base[A-Z]\w+\.(vue|js)$/
 );
 
-requireComponent.keys().forEach(fileName => {
+requireComponent.keys().forEach((fileName) => {
   const componentConfig = requireComponent(fileName);
 
   const componentName = upperFirst(
@@ -30,5 +30,5 @@ Vue.config.productionTip = false;
 new Vue({
   router,
   store,
-  render: h => h(App)
+  render: (h) => h(App),
 }).$mount("#app");
