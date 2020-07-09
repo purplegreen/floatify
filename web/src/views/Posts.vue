@@ -1,38 +1,26 @@
 <template>
   <main>
-    <div class="a">
-      <span class="magnified-element">|</span>
-    </div>
-    <div class="b">
-      <span class="magnified-element">|</span>
-    </div>
-    <div class="c">
-      <span class="magnified-element">\</span>
-    </div>
-
-    <div class="topone position">
-      <div class="top-anim">
-        <div class="box-one">
-          <p id="d0">d</p>
-          <p id="i">i</p>
-          <p id="g">g</p>
-          <p id="i">i</p>
-          <p id="t">t</p>
-          <p id="a">a</p>
-          <p id="l">l</p>
-        </div>
-        <div class="box-two">
-          <p id="d">d</p>
-          <p id="e">e</p>
-          <p id="s">s</p>
-          <p id="i">i</p>
-          <p id="g">g</p>
-          <p id="n">n</p>
-        </div>
+    <div class="bottomone">
+      <div class="a">
+        <span class="magnified-element">|</span>
+      </div>
+      <div class="b">
+        <span class="magnified-element">|</span>
+      </div>
+      <div class="c">
+        <span class="magnified-element">\</span>
+      </div>
+      <div class="d">
+        <span class="magnified-element">|</span>
+      </div>
+      <div class="e">
+        <span class="magnified-element">\</span>
       </div>
     </div>
+
+    <div class="topone">DEhlix SIGN</div>
     <ul class="list">
-      <PostCard v-for="post in posts" class="list__item" :key="post._id" v-bind:post="post" />
+      <PostCard v-for="post in posts" class="panel" :key="post._id" v-bind:post="post" />
     </ul>
   </main>
 </template>
@@ -46,6 +34,7 @@ import ScrollTrigger from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 // import BlockContent from "sanity-blocks-vue-component";
+// let sections = gsap.utils.toArray(".panel");
 const query = `*[_type == "post" ] | order(releaseDate desc)
 {
   _id,
@@ -101,15 +90,64 @@ export default {
       );
     },
     startAnimation: function() {
+      ScrollTrigger.defaults({
+        toggleActions: "restart pause resume none"
+        // markers: true
+      });
+
+      gsap.to(".a, .d", {
+        scrollTrigger: {
+          trigger: ".a",
+          endTrigger: ".b",
+          start: "top center",
+          end: "+=100",
+          scrub: true,
+
+          toggleActions: "restart pause reverse pause"
+        },
+        x: 100,
+        rotation: 190,
+        duration: 6
+      });
+
+      gsap.to(".b, .e", {
+        scrollTrigger: {
+          trigger: ".b, .a",
+          endTrigger: ".a, .c",
+          start: "top center",
+          end: "bottom 100px",
+          scrub: 6,
+
+          toggleActions: "restart pause reverse pause"
+        },
+        x: 200,
+        rotation: 360,
+        duration: 3
+      });
+
       gsap.to(".c", {
         scrollTrigger: {
           trigger: ".c",
-          markers: true,
-          toggleActions: "restart pause reverse reset"
+          endTrigger: ".c",
+          start: "top center",
+          end: "bottom 100px",
+          scrub: 3,
+
+          toggleActions: "restart pause reverse pause"
         },
-        x: 400,
-        rotation: 360,
-        duration: 3
+        x: 600,
+        rotation: 90,
+        duration: 6
+      });
+
+      gsap.utils.toArray(".panel").forEach((panel, i) => {
+        ScrollTrigger.create({
+          trigger: panel,
+          start: "top top",
+          pin: true,
+          pinSpacing: false
+        });
+        console.log(i);
       });
     }
   }
@@ -118,170 +156,67 @@ export default {
 
 <style scoped>
 main {
+  position: relative;
+  padding-top: 80vh;
   display: flex;
   flex-direction: column;
   font-size: 1rem;
-}
-
-.wrap-top {
-  padding-top: 17vh;
-  padding-bottom: 17vh;
-  position: relative;
-  width: 90vw;
-  height: 18%;
-  margin: auto;
-  text-align: center;
-}
-
-.wrap-woo {
-  width: 90vw;
-  margin: auto;
-  justify-content: center;
-  align-items: center;
-  display: flex;
+  overflow: hidden;
 }
 
 .a,
 .b,
-.c {
-  background-color: lightgreen;
-  width: 60px;
-  height: 60px;
+.c,
+.d,
+.e,
+.f {
+  background: rgb(230, 255, 226);
+  background: radial-gradient(
+    circle,
+    rgba(230, 255, 226, 0.5984552556818181) 0%,
+    rgba(192, 148, 233, 1) 100%
+  );
+  position: relative;
+  min-height: 40px;
+  height: auto;
+  width: 3.3rem;
   margin: 13px;
   padding: 7px;
+  border-radius: 12px;
+}
+
+.magnified-element {
+  font-size: 3.3rem;
+  color: mediumslateblue;
 }
 
 /* first svg animation */
 
-.topone {
-  position: relative;
-  height: 400px;
-}
-
-.magnified-element {
-  font-size: 2.3rem;
-  color: black;
-}
-
-.top-anim {
+.bottomone {
   position: absolute;
-  top: 80%;
-  left: 50%;
-  transform: translate(-50%, -99%);
-  width: 70vw;
-  height: 300px;
-  margin: auto;
+  top: 60px;
+  height: 80vh;
+  width: 100vw;
+}
+
+.topone {
+  position: absolute;
+  top: 60px;
+  height: 80vh;
+  width: 100vw;
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  align-items: flex-start;
-  font-size: 6.7em;
-  background: -webkit-linear-gradient(mediumslateblue, #8ca369);
+  align-items: center;
+  text-align: center;
+  font-size: 11.7em;
+  background: rgb(139, 134, 221);
+  background: linear-gradient(
+    90deg,
+    rgba(139, 134, 221, 1) 0%,
+    rgba(113, 162, 126, 0.7717507102272727) 100%
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-}
-
-.box-one,
-.box-two {
-  display: flex;
-  padding: 0 20px;
-}
-
-#d:hover,
-#d0:hover,
-#e:hover,
-#s:hover,
-#i:hover,
-#g:hover,
-#n:hover,
-#t:hover,
-#a:hover,
-#l:hover {
-  animation-name: wiggleWiggle;
-  animation-duration: 0.7s;
-  animation-iteration-count: infinite;
-}
-
-#d:hover {
-  animation-delay: 0s;
-  -webkit-text-fill-color: #dbe2f1;
-  border: 1px solid slategrey;
-  transform: translateY(2px);
-}
-
-#e:hover {
-  animation-delay: 0.1s;
-  -webkit-text-fill-color: #cee6f0;
-  transform: translateY(3px);
-}
-
-#s:hover {
-  animation-delay: 0.2s;
-  border: 1px solid rgb(14, 252, 65);
-  -webkit-text-fill-color: #cbe8f0;
-  transform: translateY(4px);
-}
-
-#i:hover {
-  animation-delay: 0.3s;
-  -webkit-text-fill-color: #bdeef0;
-  transform: translateY(5px);
-}
-
-#g:hover {
-  animation-delay: 0.4s;
-  -webkit-text-fill-color: #b5f1ef;
-  transform: translateY(6px);
-}
-
-#n:hover {
-  animation-delay: 0.5s;
-  -webkit-text-fill-color: #73eef9;
-  transform: translateY(1px);
-}
-
-#d0:hover {
-  animation-delay: 0.5s;
-  -webkit-text-fill-color: #b0f2dc;
-  transform: translateY(-1px);
-}
-
-#t:hover {
-  animation-delay: 0.3s;
-  -webkit-text-fill-color: #aef4c6;
-  transform: translateY(-3px);
-}
-
-#a:hover {
-  animation-delay: 0.4s;
-  -webkit-text-fill-color: #abf6b2;
-  transform: translateY(-6px);
-}
-
-#l:hover {
-  animation-delay: 0.5s;
-  -webkit-text-fill-color: #a9f79e;
-  transform: translateY(-7px);
-}
-
-@keyframes wiggleWiggle {
-  20%,
-  100% {
-    transform: translate(0, 3px);
-    display: none;
-    opacity: 0.2;
-  }
-
-  0% {
-    transform: translate(0, 0px);
-    display: block;
-    opacity: 0.5;
-  }
-  10% {
-    transform: translate(0, 2px);
-    display: block;
-    opacity: 1;
-  }
 }
 
 /* end first animation */
@@ -295,25 +230,5 @@ main {
 }
 
 @media (max-width: 700px) {
-  .topone {
-    height: 250px;
-  }
-
-  .kinesis-container {
-    width: 90vw;
-    height: 250px;
-    margin: auto;
-  }
-
-  .top-anim {
-    position: absolute;
-    top: 80%;
-    left: 50%;
-    width: 90vw;
-    height: auto;
-    margin: auto;
-    font-size: 2.7em;
-    line-height: 0.1em;
-  }
 }
 </style>
