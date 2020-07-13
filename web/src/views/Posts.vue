@@ -19,8 +19,23 @@
     </div>
 
     <div class="topone">DEhlix SIGN</div>
+
+    <div class="frutti-wrapper" v-if="loading == false">
+      <section ref="post" v-for="post in posts" class="box" :key="post._id">{{ post.title }}</section>
+    </div>
+
+    <div class="box">x</div>
+    <div class="box">y</div>
+    <div class="box">z</div>
+    <div class="box">hi</div>
+    <div class="box">ho</div>
+
+    <ul>
+      <li ref="post" v-for="post in posts" :class="box" :key="post._id">{{ post.title }}</li>
+    </ul>
+
     <ul class="list">
-      <PostCard v-for="post in posts" class="panel" :key="post._id" v-bind:post="post" />
+      <PostCard ref="post" v-for="post in posts" class :key="post._id" v-bind:post="post" />
     </ul>
   </main>
 </template>
@@ -65,24 +80,25 @@ export default {
       posts: []
     };
   },
-  created() {
-    this.fetchData();
-  },
+  created() {},
   watch: {
     $route: "fetchData"
   },
-  mounted: function() {
-    this.startAnimation();
+  mounted() {
+    this.fetchData();
   },
+  // mounted: function() {
+  //   // this.startAnimation();
+  // },
   methods: {
     fetchData() {
       this.error = this.post = null;
       this.loading = true;
       sanity.fetch(query).then(
         posts => {
-          this.loading = false;
           this.posts = posts;
-          // this.texts = this.post.title;
+          this.loading = false;
+          this.startAnimation();
         },
         error => {
           this.error = error;
@@ -91,10 +107,11 @@ export default {
     },
     startAnimation: function() {
       ScrollTrigger.defaults({
-        toggleActions: "restart pause resume none"
-        // markers: true
+        toggleActions: "restart pause resume none",
+        markers: true
       });
 
+      /* GSAP animation */
       gsap.to(".a, .d", {
         scrollTrigger: {
           trigger: ".a",
@@ -102,7 +119,6 @@ export default {
           start: "top center",
           end: "+=100",
           scrub: true,
-
           toggleActions: "restart pause reverse pause"
         },
         x: 100,
@@ -117,7 +133,6 @@ export default {
           start: "top center",
           end: "bottom 100px",
           scrub: 6,
-
           toggleActions: "restart pause reverse pause"
         },
         x: 200,
@@ -132,7 +147,6 @@ export default {
           start: "top center",
           end: "bottom 100px",
           scrub: 3,
-
           toggleActions: "restart pause reverse pause"
         },
         x: 600,
@@ -140,14 +154,37 @@ export default {
         duration: 6
       });
 
-      gsap.utils.toArray(".panel").forEach((panel, i) => {
-        ScrollTrigger.create({
-          trigger: panel,
-          start: "top top",
-          pin: true,
-          pinSpacing: false
+      gsap.utils.toArray(".frutti").forEach((el, i) => {
+        gsap.to(el, {
+          scrollTrigger: {
+            trigger: ".frutti-wrapper",
+            start: "top top",
+            end: "bottom center+=150",
+            pin: ".frutti-wrapper",
+            scrub: (7 - i) * 0.1
+          },
+          y: "45vh"
         });
-        console.log(i);
+      });
+
+      gsap.utils.toArray(".box").forEach((el, i) => {
+        gsap.to(el, {
+          scrollTrigger: {
+            trigger: el,
+            scrub: i * 0.2
+          },
+          x: "400px"
+        });
+        console.log(i, "hello there");
+      });
+
+      gsap.utils.toArray(".frutti").forEach(frutto => {
+        ScrollTrigger.create({
+          trigger: frutto,
+          start: "top 80%",
+          end: "center top",
+          toggleClass: "active"
+        });
       });
     }
   }
@@ -221,6 +258,26 @@ main {
 
 /* end first animation */
 
+.frutti-wrapper {
+  border: 3px solid violet;
+}
+
+.box {
+  background-color: lightgreen;
+  padding: 10px;
+  margin: 10px;
+  width: 200px;
+  height: 30px;
+}
+
+.active {
+  border: 3px solid blue;
+  background-color: chartreuse;
+}
+
+.panel {
+  border: 3px solid lightsteelblue;
+}
 .list {
   display: flex;
   flex-wrap: wrap;

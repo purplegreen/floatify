@@ -43,12 +43,6 @@ export default {
       text: ""
     };
   },
-  // created() {
-  //   this.fetchData();
-  // },
-  // watch: {
-  //   $route: "fetchData"
-  // },
   mounted() {
     const titles = ["{{ post.title }}"];
 
