@@ -24,6 +24,10 @@
       <section ref="post" v-for="post in posts" class="box" :key="post._id">{{ post.title }}</section>
     </div>
 
+    <div class="frutti box-box">mela</div>
+    <div class="frutti box-box">pera</div>
+    <div class="frutti box-box">limone</div>
+
     <div class="box">x</div>
     <div class="box">y</div>
     <div class="box">z</div>
@@ -178,13 +182,15 @@ export default {
         console.log(i, "hello there");
       });
 
-      gsap.utils.toArray(".frutti").forEach(frutto => {
+      gsap.utils.toArray(".frutti").forEach((el, i) => {
         ScrollTrigger.create({
-          trigger: frutto,
-          start: "top 80%",
-          end: "center top",
-          toggleClass: "active"
+          trigger: ".frutti",
+          start: "top center",
+          end: "+=100",
+          toggleClass: "active",
+          scrub: 12
         });
+        console.log(el, i, "hello I'm el and i");
       });
     }
   }
@@ -264,6 +270,14 @@ main {
 
 .box {
   background-color: lightgreen;
+  padding: 10px;
+  margin: 10px;
+  width: 200px;
+  height: 30px;
+}
+
+.box-box {
+  background-color: pink;
   padding: 10px;
   margin: 10px;
   width: 200px;
