@@ -83,7 +83,7 @@ article {
   align-items: center;
   justify-content: center;
   margin: 0px;
-  width: 90vw;
+  width: 100%;
   height: 300px;
   overflow: hidden;
 }

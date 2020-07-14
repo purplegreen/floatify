@@ -38,9 +38,9 @@
       <li ref="post" v-for="post in posts" :class="box" :key="post._id">{{ post.title }}</li>
     </ul>
 
-    <ul class="list">
-      <PostCard ref="post" v-for="post in posts" class :key="post._id" v-bind:post="post" />
-    </ul>
+    <div class="list" v-if="loading == false">
+      <PostCard ref="post" v-for="post in posts" class="ux" :key="post._id" v-bind:post="post" />
+    </div>
   </main>
 </template>
 
@@ -98,21 +98,26 @@ export default {
     fetchData() {
       this.error = this.post = null;
       this.loading = true;
-      sanity.fetch(query).then(
-        posts => {
-          this.posts = posts;
-          this.loading = false;
+      sanity
+        .fetch(query)
+        .then(
+          posts => {
+            this.posts = posts;
+            this.loading = false;
+            this.startAnimation();
+          },
+          error => {
+            this.error = error;
+          }
+        )
+        .then(() => {
           this.startAnimation();
-        },
-        error => {
-          this.error = error;
-        }
-      );
+        });
     },
     startAnimation: function() {
       ScrollTrigger.defaults({
-        toggleActions: "restart pause resume none",
-        markers: true
+        toggleActions: "restart pause resume none"
+        // markers: true
       });
 
       /* GSAP animation */
@@ -185,12 +190,25 @@ export default {
       gsap.utils.toArray(".frutti").forEach((el, i) => {
         ScrollTrigger.create({
           trigger: ".frutti",
-          start: "top center",
-          end: "+=100",
           toggleClass: "active",
-          scrub: 12
+          scrub: true,
+          markers: true
         });
-        console.log(el, i, "hello I'm el and i");
+        console.log(el, "hello el");
+        console.log(i, "hi i");
+      });
+
+      gsap.utils.toArray(".ux").forEach((el, i) => {
+        gsap.to(el, {
+          scrollTrigger: {
+            trigger: el,
+            scrub: i * 0.2
+          },
+          x: "30px",
+          rotation: 90,
+          duration: 25
+        });
+        console.log(i, "hello there");
       });
     }
   }
