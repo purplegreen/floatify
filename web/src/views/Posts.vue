@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="bottomone">
+    <div class="above">
       <div class="a">
         <span class="magnified-element">|</span>
       </div>
@@ -11,35 +11,36 @@
         <span class="magnified-element">\</span>
       </div>
       <div class="d">
-        <span class="magnified-element">|</span>
+        <span class="magnified-element">x</span>
       </div>
       <div class="e">
         <span class="magnified-element">\</span>
       </div>
+      <div class="f">
+        <span class="magnified-element">\</span>
+      </div>
+      <div class="g">
+        <span class="magnified-element">/</span>
+      </div>
+      <div class="h">
+        <span class="magnified-element">\</span>
+      </div>
+      <div class="i">
+        <span class="magnified-element">|</span>
+      </div>
+      <div class="l">
+        <span class="magnified-element">\</span>
+      </div>
     </div>
-
-    <div class="topone">DEhlix SIGN</div>
-
-    <div class="frutti-wrapper" v-if="loading == false">
-      <section ref="post" v-for="post in posts" class="box" :key="post._id">{{ post.title }}</section>
-    </div>
-
-    <div class="frutti box-box">mela</div>
-    <div class="frutti box-box">pera</div>
-    <div class="frutti box-box">limone</div>
-
-    <div class="box">x</div>
-    <div class="box">y</div>
-    <div class="box">z</div>
-    <div class="box">hi</div>
-    <div class="box">ho</div>
-
-    <ul>
-      <li ref="post" v-for="post in posts" :class="box" :key="post._id">{{ post.title }}</li>
-    </ul>
 
     <div class="list" v-if="loading == false">
-      <PostCard ref="post" v-for="post in posts" class="ux" :key="post._id" v-bind:post="post" />
+      <PostCard
+        ref="post"
+        v-for="post in posts"
+        class="cards-anim"
+        :key="post._id"
+        v-bind:post="post"
+      />
     </div>
   </main>
 </template>
@@ -51,9 +52,6 @@ import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
-
-// import BlockContent from "sanity-blocks-vue-component";
-// let sections = gsap.utils.toArray(".panel");
 const query = `*[_type == "post" ] | order(releaseDate desc)
 {
   _id,
@@ -76,7 +74,6 @@ export default {
   name: "Posts",
   components: {
     PostCard
-    // BlockContent,
   },
   data() {
     return {
@@ -91,9 +88,6 @@ export default {
   mounted() {
     this.fetchData();
   },
-  // mounted: function() {
-  //   // this.startAnimation();
-  // },
   methods: {
     fetchData() {
       this.error = this.post = null;
@@ -104,7 +98,6 @@ export default {
           posts => {
             this.posts = posts;
             this.loading = false;
-            this.startAnimation();
           },
           error => {
             this.error = error;
@@ -120,19 +113,32 @@ export default {
         // markers: true
       });
 
-      /* GSAP animation */
       gsap.to(".a, .d", {
         scrollTrigger: {
-          trigger: ".a",
-          endTrigger: ".b",
+          trigger: ".a, .l, .f, a",
+          endTrigger: ".b, .d, .l, .c",
           start: "top center",
           end: "+=100",
-          scrub: true,
+          scrub: 7,
           toggleActions: "restart pause reverse pause"
         },
         x: 100,
         rotation: 190,
         duration: 6
+      });
+
+      gsap.to(".f, .h, .i", {
+        scrollTrigger: {
+          trigger: ".c, .b, .i",
+          endTrigger: ".c, .h, .i",
+          start: "top center",
+          end: "top 60px",
+          scrub: 3,
+          toggleActions: "restart pause reverse pause"
+        },
+        x: -90,
+        rotation: 90,
+        duration: 3
       });
 
       gsap.to(".b, .e", {
@@ -146,67 +152,82 @@ export default {
         },
         x: 200,
         rotation: 360,
-        duration: 3
+        duration: 9,
+        scale: gsap.utils.distribute({
+          base: 2.7,
+          amount: 0.5,
+          from: "center"
+        })
+      });
+
+      gsap.to(".g", {
+        scrollTrigger: {
+          trigger: ".c",
+          endTrigger: ".e",
+          start: "top center",
+          end: "bottom 100px",
+          scrub: 2,
+          toggleActions: "restart pause reverse pause"
+        },
+        x: 190,
+        rotation: 360,
+        duration: 3,
+        scale: gsap.utils.distribute({
+          base: 2.7,
+          amount: 1.2,
+          from: "center"
+        })
       });
 
       gsap.to(".c", {
         scrollTrigger: {
           trigger: ".c",
-          endTrigger: ".c",
+          endTrigger: ".e",
           start: "top center",
           end: "bottom 100px",
           scrub: 3,
           toggleActions: "restart pause reverse pause"
         },
-        x: 600,
+        x: 160,
         rotation: 90,
-        duration: 6
+        duration: 9,
+        scale: gsap.utils.distribute({
+          base: 3,
+          amount: 0.5,
+          from: "center"
+        })
       });
 
-      gsap.utils.toArray(".frutti").forEach((el, i) => {
-        gsap.to(el, {
-          scrollTrigger: {
-            trigger: ".frutti-wrapper",
-            start: "top top",
-            end: "bottom center+=150",
-            pin: ".frutti-wrapper",
-            scrub: (7 - i) * 0.1
-          },
-          y: "45vh"
-        });
+      gsap.to(".l", {
+        scrollTrigger: {
+          trigger: ".b",
+          endTrigger: ".a",
+          start: "top center",
+          end: "bottom 100px",
+          scrub: 2,
+          toggleActions: "restart pause reverse pause"
+        },
+        x: -260,
+        rotation: 180,
+        duration: 6,
+        scale: gsap.utils.distribute({
+          base: 2,
+          amount: 1.6,
+          from: "center"
+        })
       });
 
-      gsap.utils.toArray(".box").forEach((el, i) => {
-        gsap.to(el, {
-          scrollTrigger: {
-            trigger: el,
-            scrub: i * 0.2
-          },
-          x: "400px"
-        });
-        console.log(i, "hello there");
-      });
-
-      gsap.utils.toArray(".frutti").forEach((el, i) => {
-        ScrollTrigger.create({
-          trigger: ".frutti",
-          toggleClass: "active",
-          scrub: true,
-          markers: true
-        });
-        console.log(el, "hello el");
-        console.log(i, "hi i");
-      });
-
-      gsap.utils.toArray(".ux").forEach((el, i) => {
+      gsap.utils.toArray(".cards-anim").forEach((el, i) => {
         gsap.to(el, {
           scrollTrigger: {
             trigger: el,
-            scrub: i * 0.2
+            start: "top center",
+            end: "bottom 100px",
+            scrub: i * 0.1
+            // markers: true
           },
-          x: "30px",
-          rotation: 90,
-          duration: 25
+          y: 48,
+          duration: 9
         });
         console.log(i, "hello there");
       });
@@ -230,14 +251,19 @@ main {
 .c,
 .d,
 .e,
-.f {
+.f,
+.g,
+.h,
+.i,
+.l {
   background: rgb(230, 255, 226);
   background: radial-gradient(
     circle,
     rgba(230, 255, 226, 0.5984552556818181) 0%,
-    rgba(192, 148, 233, 1) 100%
+    rgb(200, 200, 204) 100%
   );
   position: relative;
+
   min-height: 40px;
   height: auto;
   width: 3.3rem;
@@ -251,71 +277,24 @@ main {
   color: mediumslateblue;
 }
 
-/* first svg animation */
-
-.bottomone {
+.above {
   position: absolute;
-  top: 60px;
-  height: 80vh;
-  width: 100vw;
-}
-
-.topone {
-  position: absolute;
-  top: 60px;
-  height: 80vh;
-  width: 100vw;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  font-size: 11.7em;
-  background: rgb(139, 134, 221);
-  background: linear-gradient(
-    90deg,
-    rgba(139, 134, 221, 1) 0%,
-    rgba(113, 162, 126, 0.7717507102272727) 100%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  flex-direction: column;
+  flex-wrap: wrap;
+  top: 30px;
+  height: 76vh;
+  width: 100vw;
 }
 
-/* end first animation */
-
-.frutti-wrapper {
-  border: 3px solid violet;
-}
-
-.box {
-  background-color: lightgreen;
-  padding: 10px;
-  margin: 10px;
-  width: 200px;
-  height: 30px;
-}
-
-.box-box {
-  background-color: pink;
-  padding: 10px;
-  margin: 10px;
-  width: 200px;
-  height: 30px;
-}
-
-.active {
-  border: 3px solid blue;
-  background-color: chartreuse;
-}
-
-.panel {
-  border: 3px solid lightsteelblue;
-}
 .list {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
-  width: 100vw;
-  justify-content: space-around;
+  width: 96vw;
+  margin: auto;
+  justify-content: space-evenly;
+  padding-bottom: 100px;
 }
 
 @media (max-width: 700px) {

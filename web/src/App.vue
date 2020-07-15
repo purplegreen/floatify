@@ -46,7 +46,7 @@ export default {
 }
 
 footer {
-  padding: 5rem 1rem;
+  padding: 1rem;
   text-align: center;
   font-size: 1rem;
 }

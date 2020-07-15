@@ -16,7 +16,7 @@ export default {
       default() {
         return {
           minSize: 16,
-          maxSize: 512,
+          maxSize: 450,
           multiLine: true
         };
       }

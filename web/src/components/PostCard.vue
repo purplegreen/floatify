@@ -7,18 +7,18 @@
       <article>
         <div class="picker" :style="{ 'background-color': post.favoriteColor.hex }">
           <FitText class="theTitle" v-html="post.title" />
+          <!-- <h2 class="theTitle">{{ post.title }}</h2> -->
           <BaseIcon class="pattern" name="shade" />
         </div>
       </article>
 
-      <div class="content-wrap">
+      <!-- <div class="content-wrap">
         <h3
           class="cat-list"
           v-for="category in post.categories"
           v-bind:key="category._id"
         >{{ category.title }}</h3>
-        <!-- <block-content :blocks="post.body" /> -->
-      </div>
+      </div>-->
     </router-link>
   </section>
 </template>
@@ -67,9 +67,10 @@ export default {
   -webkit-box-shadow: 0px 10px 13px -7px #000000,
     5px 5px 15px 5px rgba(0, 0, 0, 0);
   box-shadow: 0px 10px 13px -7px #000000, 5px 5px 15px 5px rgba(0, 0, 0, 0);
-  width: 300px;
+  width: 94vw;
   flex-wrap: wrap;
   margin: 20px;
+  border-radius: 8px;
 }
 
 article {
@@ -85,6 +86,7 @@ article {
   margin: 0px;
   width: 100%;
   height: 300px;
+  border-radius: 8px;
   overflow: hidden;
 }
 
@@ -112,7 +114,7 @@ article {
 }
 
 .theTitle {
-  color: white;
+  color: whitesmoke;
   text-align: center;
   top: 50%;
   left: 50%;
@@ -120,6 +122,10 @@ article {
   -webkit-transform: translate(-50%, -50%);
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
+}
+
+.theTitle:hover {
+  color: white;
 }
 
 .content-wrap {
