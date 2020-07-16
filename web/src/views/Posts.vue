@@ -274,7 +274,16 @@ main {
 
 .magnified-element {
   font-size: 3.3rem;
-  color: mediumslateblue;
+  background-image: linear-gradient(
+    to right top,
+    #f186ff,
+    #ff67aa,
+    #ff893d,
+    #e7c300,
+    #39eb12
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .above {

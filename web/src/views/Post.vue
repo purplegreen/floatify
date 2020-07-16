@@ -15,7 +15,6 @@
         :src="imageUrlFor(post.mainImage).ignoreImageParams()"
       />
       <div class="card">
-        <h2 class="card-title">{{ post.title }}</h2>
         <p class="block-content">
           <block-content :blocks="post.body" />
         </p>
@@ -217,5 +216,11 @@ article {
 .cat-description {
   list-style: none;
   padding-left: 6px;
+}
+
+@media (max-width: 700px) {
+  .card {
+    margin: auto;
+  }
 }
 </style>

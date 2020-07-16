@@ -88,6 +88,9 @@ nav a {
   background-color: white;
   padding: 7px 14px;
   margin: 3px;
+  -webkit-box-shadow: 0px 10px 13px -7px #000000,
+    5px 5px 15px 5px rgba(0, 0, 0, 0);
+  box-shadow: 0px 10px 13px -7px #000000, 5px 5px 15px 5px rgba(0, 0, 0, 0);
 }
 
 h1,
@@ -99,6 +102,12 @@ h1 a {
   background-color: white;
   padding: 7px 14px;
   margin: 3px;
+}
+
+h1 {
+  -webkit-box-shadow: 0px 10px 13px -7px #000000,
+    5px 5px 15px 5px rgba(0, 0, 0, 0);
+  box-shadow: 0px 10px 13px -7px #000000, 5px 5px 15px 5px rgba(0, 0, 0, 0);
 }
 </style>
 
@@ -180,7 +189,6 @@ svg.icon.incon-colors {
     box-sizing: border-box;
     margin-right: 3vw;
     margin-left: 3vw;
-    background-color: white;
   }
 }
 </style>
